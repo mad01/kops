@@ -124,6 +124,21 @@ func (c *CertificatePool) All() []*pki.Certificate {
 	return certs
 }
 
+// LoadPEMPrivateKey public
+func LoadPEMPrivateKey(pemData []byte) (*PrivateKey, error) {
+	pemKey, err := parsePEMPrivateKey(pemData)
+	if err != nil {
+		return nil, fmt.Errorf("failed ot load pem: %v", err)
+	}
+	key := PrivateKey{Key: pemKey}
+	return &key, nil
+}
+
+type CertificatePool struct {
+	Secondary []*Certificate
+	Primary   *Certificate
+}
+
 func (c *CertificatePool) AsString() (string, error) {
 	// Nicer behaviour because this is called from templates
 	if c == nil {
